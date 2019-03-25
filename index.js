@@ -100,24 +100,25 @@ SVIFT.render.drawPNG = function(){
     var computedStyleStr = "";
     var dict = {};
 
-    for(key in styles){
-      if(!isNaN(key)){
-        var tKey = (key.split('-').join('')).toLowerCase();
-        dict[tKey] = styles[key];
-      }
-    }
+    // for(key in styles){
+    //   if(!isNaN(key)){
+    //     var tKey = (key.split('-').join('')).toLowerCase();
+    //     dict[tKey] = styles[key];
+    //   }
+    // }
 
     for(key in styles){
       if(isNaN(key)){
-        var tKey = (key.split('-').join('')).toLowerCase();
-        var oKey = key;
-        if(tKey in dict){
-          oKey = dict[tKey];
-        }
-        computedStyleStr += oKey + ":" + styles[key] + ";";
+        // var tKey = (key.split('-').join('')).toLowerCase();
+        // var oKey = key;
+        // if(tKey in dict){
+        //   oKey = dict[tKey];
+        // }
+        //computedStyleStr += oKey + ":" + styles[key] + ";";
+        that.node().style[key] = styles[key];
       }
     }
-    that.node().setAttribute('style', computedStyleStr);
+    //that.node().setAttribute('style', computedStyleStr);
   });
 
   SVIFT.render.toDataURL(function(data) {
