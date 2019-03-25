@@ -98,7 +98,7 @@ SVIFT.render.drawPNG = function(){
       if(key === parseInt(key, 10)){
         //ignore
       }else{
-        computedStyleStr += key + ":" + styles[key];
+        computedStyleStr += key + ":" + styles[key] + ";";
       }
     }
     that.node().setAttribute('style', computedStyleStr);
