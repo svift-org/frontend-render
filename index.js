@@ -91,7 +91,15 @@ SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHe
 SVIFT.render.drawPNG = function(){
 
   d3.selectAll('#offscreen-svg svg *').each(function(d,i){
-    console.log(window.getComputedStyle(d3.select(this).node()));
+    var that = d3.select(this);
+    var styles = window.getComputedStyle(that.node());
+    for(var key in styles){
+      if(key === parseInt(key, 10)){
+        //ignore
+      }else{
+        that.style(key, styles[key]);
+      }
+    }
   });
 
   SVIFT.render.toDataURL(function(data) {
