@@ -99,11 +99,12 @@ SVIFT.render.drawPNG = function(){
     var styles = window.getComputedStyle(that.node());
 
     for(key in styles){
-      if(isNaN(key) && key !== 'transform' && key !== 'x' && key !== 'y'){
+      if(isNaN(key)){
+        var value = styles[key];
         if(that.attr(key) !== null){
-          styles[key] = that.attr(key);
+          value = that.attr(key);
         }
-        that.node().style[key] = styles[key];
+        that.node().style[key] = value;
       }
     }
   });
