@@ -110,7 +110,11 @@ SVIFT.render.drawPNG = function(){
     for(key in styles){
       if(isNaN(key)){
         var tKey = (key.split('-').join('')).toLowerCase();
-        computedStyleStr += dict[tKey] + ":" + styles[key] + ";";
+        var oKey = key;
+        if(tKey in dict){
+          oKey = dict[tKey];
+        }
+        computedStyleStr += oKey + ":" + styles[key] + ";";
       }
     }
     that.node().setAttribute('style', computedStyleStr);
