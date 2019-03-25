@@ -2,11 +2,7 @@ SVIFT.render = {};
 
 SVIFT.render.state = {
   running: false,
-  default: {
-    vis: {},
-    data: {},
-    style: {}
-  },
+  default: null,
   vis: null
 };
 
@@ -35,13 +31,7 @@ SVIFT.render.init = function(){
  */
 SVIFT.render.setupVis = function(data){
 
-  SVIFT.render.state.default.vis.type = data.vis.type;
-  SVIFT.render.state.default.data.format = data.data.format;
-  SVIFT.render.state.default.data.data = data.data.data;
-  SVIFT.render.state.default.data.lables = data.data.lables;
-  SVIFT.render.state.default.data.colors = data.data.colors || null; 
-  SVIFT.render.state.default.style.theme = data.style.theme;
-  SVIFT.render.state.default.style.color.main = data.style.color.main;
+  SVIFT.render.state.default = data;
 
   SVIFT.render.container.select('svg').remove();
 
