@@ -133,7 +133,7 @@ var canvas = document.getElementById("mcanvas");
  * Generate a gif
  */
 SVIFT.render.buildGif = function(){
-  let gif = new GIF({
+  var gif = new GIF({
     workers: 3,
     quality: 0.5,
     repeat: 0,
