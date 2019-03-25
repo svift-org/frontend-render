@@ -89,6 +89,11 @@ SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHe
  * Copy the current SVG to the PNG
  */
 SVIFT.render.drawPNG = function(){
+
+  d3.selectAll('#offscreen-svg svg *').each(function(d,i){
+    console.log(window.getComputedStyle(d3.select(this).node()));
+  });
+
   SVIFT.render.toDataURL(function(data) {
 
     var link = document.createElement('a');
