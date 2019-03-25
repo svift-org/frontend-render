@@ -103,7 +103,7 @@ SVIFT.render.drawPNG = function(){
  * Returns the content of the offscreen SVG as a PNG
  */
 SVIFT.render.toDataURL = function(callback) {
-  toDataURL(document.getElementById('offscreen-svg'), "image/png", {
+  toDataURL(document.getElementById('offscreen-svg').children[0], "image/png", {
     callback: callback
   });
 };
