@@ -1,9 +1,12 @@
 SVIFT.render = {};
 
 SVIFT.render.state = {
-  running: false,
+  init: false,
+  setup: false,
   default: null,
-  vis: null
+  vis: null,
+  width: 500, 
+  height: 500
 };
 
 /*
@@ -22,6 +25,8 @@ SVIFT.render.init = function(){
       .append("div")
         .attr("id", "offscreen-svg")
         //.style("display", "none");
+    
+    SVIFT.render.resizeSVG(SVIFT.render.state.width, SVIFT.render.state.height, 0, 0);
 
   }
 };
@@ -30,16 +35,20 @@ SVIFT.render.init = function(){
  * Setup visualisation in the offscreen svg, based on the data's configuration info
  */
 SVIFT.render.setupVis = function(data){
+  SVIFT.render.state.setup = true;
 
   SVIFT.render.state.default = data;
 
   SVIFT.render.container.select('svg').remove();
 
   SVIFT.render.state.vis = SVIFT.vis[data.vis.type](SVIFT.render.state.default, SVIFT.render.container);
-  SVIFT.render.state.vis.setScale(false);
+  SVIFT.render.state.vis.setScale(true);
+
   SVIFT.render.state.vis.init();
   SVIFT.render.state.vis.start();
-  SVIFT.render.state.vis.setScale(true);
+
+  SVIFT.render.state.vis.setScale(false);
+
 };
 
 /*
@@ -52,9 +61,25 @@ SVIFT.render.drawSVG = function(keyFrame){
  * Resize svg pixelWidth/pixelHeight for output size, renderWidth/renderHeight for internal size
  */
 SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHeight){
-  SVIFT.render.container
-    .style('width', pixelWidth)
-    .style('height', pixelHeight);
+  if(SVIFT.render.state.setup){
+    SVIFT.render.state.vis.setScale(true);
+
+    SVIFT.render.container
+      .style('width', renderWidth)
+      .style('height', renderHeight);
+    
+    SVIFT.render.state.vis.setScale(false);
+
+    SVIFT.render.container
+      .style('width', pixelWidth)
+      .style('height', pixelHeight);
+
+
+  } else {
+    SVIFT.render.container
+      .style('width', pixelWidth)
+      .style('height', pixelHeight);
+  }
 };
 
 
