@@ -90,35 +90,22 @@ SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHe
  */
 SVIFT.render.drawPNG = function(){
 
-  d3.selectAll('#offscreen-svg svg')
+  d3.select('#offscreen-svg svg')
     .style('width', 500)
     .style('height', 500);
 
-  d3.selectAll('#offscreen-svg svg text, #offscreen-svg svg path, #offscreen-svg svg rect, #offscreen-svg svg circle, #offscreen-svg svg line, #offscreen-svg svg ellipse, #offscreen-svg svg tspan, #offscreen-svg svg title').each(function(d,i){
+  d3.selectAll('#offscreen-svg svg g, #offscreen-svg svg text, #offscreen-svg svg path, #offscreen-svg svg rect, #offscreen-svg svg circle, #offscreen-svg svg line, #offscreen-svg svg ellipse, #offscreen-svg svg tspan, #offscreen-svg svg title').each(function(d,i){
     var that = d3.select(this);
     var styles = window.getComputedStyle(that.node());
-    var computedStyleStr = "";
-    var dict = {};
-
-    // for(key in styles){
-    //   if(!isNaN(key)){
-    //     var tKey = (key.split('-').join('')).toLowerCase();
-    //     dict[tKey] = styles[key];
-    //   }
-    // }
 
     for(key in styles){
       if(isNaN(key)){
-        // var tKey = (key.split('-').join('')).toLowerCase();
-        // var oKey = key;
-        // if(tKey in dict){
-        //   oKey = dict[tKey];
-        // }
-        //computedStyleStr += oKey + ":" + styles[key] + ";";
+        if(that.attr(key)){
+          styles[key] = that.attr(key);
+        }
         that.node().style[key] = styles[key];
       }
     }
-    //that.node().setAttribute('style', computedStyleStr);
   });
 
   SVIFT.render.toDataURL(function(data) {
