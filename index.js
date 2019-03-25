@@ -9,7 +9,7 @@ SVIFT.render.state = {
   height: 500
 };
 
-console.log("0.0.3");
+console.log("0.0.4");
 
 /*
  * This function sets up an offscreen rendering canvas and svg
@@ -20,14 +20,11 @@ SVIFT.render.init = function(){
 
     SVIFT.render.container = d3.select("body")
       .append("div")
-        .attr("id", "offscreen-svg");
+        .attr("id", "offscreen-svg")
         //.style("display", "none");
+        .style("position", "absolute");
     
-    SVIFT.render.canvas = d3.select("body")
-      .append("div")
-        .attr("id", "offscreen-svg");
-        //.style("display", "none");
-    
+    // set default width/height 
     SVIFT.render.resizeSVG(SVIFT.render.state.width, SVIFT.render.state.height, 0, 0);
 
   }
@@ -55,6 +52,8 @@ SVIFT.render.setupVis = function(data){
  * Move the playhead in the visualisation to the designated keyFrame (integer >= 0)
  */
 SVIFT.render.drawSVG = function(keyFrame){
+  SVIFT.render.state.vis.goTo(keyFrame);
+  //v.reset();
 };
 
 /*
@@ -87,6 +86,23 @@ SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHe
  * Copy the current SVG to the PNG
  */
 SVIFT.render.drawPNG = function(){
+  SVIFT.render.toDataURL(function(data) {
+
+    let link = document.createElement('a');
+    link.download = "my-image.png";
+    link.href = image;
+    link.click();
+
+  });
+};
+
+/*
+ * Returns the content of the offscreen SVG as a PNG
+ */
+SVIFT.render.toDataURL = function(callback) {
+  toDataURL(document.getElementById('offscreen-svg'), "image/png", {
+    callback: callback
+  });
 };
 
 /*
@@ -99,12 +115,58 @@ SVIFT.render.storePNG = function(key){
  * Generate a download request for the data, returns false if image does not exist
  */
 SVIFT.render.downloadPNG = function(key){
+
 };
+
+/*
+
+var canvas = document.getElementById("mcanvas");
+  image = canvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+  var link = document.createElement('a');
+  link.download = "my-image.png";
+  link.href = image;
+  link.click();
+
+*/
 
 /*
  * Generate a gif
  */
 SVIFT.render.buildGif = function(){
+  let gif = new GIF({
+    workers: 3,
+    quality: 0.5,
+    repeat: 0,
+    width: 500,
+    height: 500
+  }).on("progress", function (p) {
+    console.log("progress", p);
+  }).on("finished", function (blob) {
+    console.log("finished");
+    d3.select('#container').append('img')
+      .attr("src",URL.createObjectURL(blob))
+      .style('width', 500)
+      .style('height', 500);
+  });
+
+  /*let img = new Image();
+    img.crossOrigin = "*";
+    
+    img.onload = function(){
+      gif.addFrame(img, {
+        delay: 1,
+        copy: true
+      });
+
+      added++;
+      if(added == 9){
+        gif.render();
+      }else{
+        addFrame();
+      }
+    };
+
+    img.src = data; */
 };
 
 /*
@@ -224,3 +286,150 @@ function clear(){
   }
 
 */
+
+SVIFT.render.config = {
+	"video":{
+		"size":{
+			"width":500,
+			"height":500
+		},
+		"output":{
+			"width":500,
+			"height":500
+		}
+	},
+	"sizes":[
+		{
+			"file": "instagram",
+			"name": "Instagram",
+			"size":{
+				"width":540,
+				"height":540
+			},
+			"scale":{
+				"width":1080,
+				"height":1080
+			}
+		},
+		{
+			"file": "linkedin",
+			"name":"LinkIn",
+			"size":{
+				"width":700,
+				"height":400
+			},
+			"scale":{
+				"width":1400,
+				"height":800
+			}
+		},
+		{
+			"file": "google",
+			"name":"Google+",
+			"size":{
+				"width":497,
+				"height":373
+			},
+			"scale":{
+				"width":994,
+				"height":746
+			}
+		},
+		{
+			"file": "tumblr",
+			"name":"Tumblr",
+			"size":{
+				"width":640,
+				"height":960
+			},
+			"scale":{
+				"width":1280,
+				"height":1920
+			}
+		},
+		{
+			"file": "pinterest",
+			"name":"Pinterest",
+			"size":{
+				"width":600,
+				"height":600
+			},
+			"scale":{
+				"width":1200,
+				"height":1200
+			}
+		},
+		{
+			"file": "twitter",
+			"name":"Twitter",
+			"size":{
+				"width":512,
+				"height":256
+			},
+			"scale":{
+				"width":1024,
+				"height":512
+			}
+		},
+		{
+			"file": "snapchat",
+			"name":"Snapchat",
+			"size":{
+				"width":476,
+				"height":810
+			},
+			"scale":{
+				"width":952,
+				"height":1620
+			}
+		},
+		{
+			"file": "facebook",
+			"name":"Facebook",
+			"size":{
+				"width":600,
+				"height":315
+			},
+			"scale":{
+				"width":1200,
+				"height":630
+			}
+		},
+		{
+			"file": "horizontal",
+			"name":"Horizontal / Landscape",
+			"size":{
+				"width":1024,
+				"height":512
+			},
+			"scale":{
+				"width":2048,
+				"height":1024
+			}
+		},
+		{
+			"file": "vertical",
+			"name":"Vertical / Portrait",
+			"size":{
+				"width":800,
+				"height":1200
+			},
+			"scale":{
+				"width":1600,
+				"height":2400
+			}
+		},
+		{
+			"file": "square",
+			"name":"Square",
+			"size":{
+				"width":512,
+				"height":512
+			},
+			"scale":{
+				"width":1024,
+				"height":1024
+			}
+		}
+	]
+};
