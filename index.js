@@ -90,7 +90,7 @@ SVIFT.render.drawPNG = function(){
 
     var link = document.createElement('a');
     link.download = "my-image.png";
-    link.href = image;
+    link.href = data;
     link.click();
 
   });
