@@ -88,7 +88,7 @@ SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHe
 SVIFT.render.drawPNG = function(){
   SVIFT.render.toDataURL(function(data) {
 
-    let link = document.createElement('a');
+    var link = document.createElement('a');
     link.download = "my-image.png";
     link.href = image;
     link.click();
