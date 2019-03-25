@@ -9,6 +9,8 @@ SVIFT.render.state = {
   height: 500
 };
 
+console.log("0.0.2");
+
 /*
  * This function sets up an offscreen rendering canvas and svg
  */
