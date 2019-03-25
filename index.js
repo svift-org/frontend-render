@@ -102,14 +102,14 @@ SVIFT.render.drawPNG = function(){
 
     for(key in styles){
       if(!isNaN(key)){
-        let tKey = (key.split('-').join('')).toLowerCase();
+        var tKey = (key.split('-').join('')).toLowerCase();
         dict[tKey] = styles[key];
       }
     }
 
     for(key in styles){
       if(isNaN(key)){
-        let tKey = (key.split('-').join('')).toLowerCase();
+        var tKey = (key.split('-').join('')).toLowerCase();
         computedStyleStr += dict[tKey] + ":" + styles[key] + ";";
       }
     }
