@@ -41,16 +41,7 @@ SVIFT.render.setupVis = function(data){
   SVIFT.render.state.default.data.lables = data.data.lables;
   SVIFT.render.state.default.data.colors = data.data.colors || null; 
   SVIFT.render.state.default.style.theme = data.style.theme;
-
-  /*
-   if(typeof d.color != "undefined"){
-    module.default.style.color.main = d.label;
-    module.vis.setColor(d.label);
-  }else{
-    module.default.style.theme = d.id;
-    module.vis.setTheme(d.id);
-  }
-  */
+  SVIFT.render.state.default.style.color.main = data.style.color.main;
 
   SVIFT.render.container.select('svg').remove();
 
