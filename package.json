@@ -1,0 +1,19 @@
+{
+  "name": "frontend-render",
+  "version": "0.0.1",
+  "description": "Frontend rendering",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svift-org/frontend-render.git"
+  },
+  "author": "Sebastian Meier @seb_meier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/svift-org/frontend-render/issues"
+  },
+  "homepage": "https://github.com/svift-org/frontend-render#readme"
+}
