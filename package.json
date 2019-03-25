@@ -1,5 +1,5 @@
 {
-  "name": "frontend-render",
+  "name": "svift-render",
   "version": "0.0.1",
   "description": "Frontend rendering",
   "main": "index.js",
