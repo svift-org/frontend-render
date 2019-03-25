@@ -100,7 +100,7 @@ SVIFT.render.drawPNG = function(){
 
     for(key in styles){
       if(isNaN(key)){
-        if(that.attr(key)){
+        if(that.attr(key) !== null){
           styles[key] = that.attr(key);
         }
         that.node().style[key] = styles[key];
