@@ -9,7 +9,7 @@ SVIFT.render.state = {
   height: 500
 };
 
-console.log("0.0.2");
+console.log("0.0.3");
 
 /*
  * This function sets up an offscreen rendering canvas and svg
@@ -20,12 +20,12 @@ SVIFT.render.init = function(){
 
     SVIFT.render.container = d3.select("body")
       .append("div")
-        .attr("id", "offscreen-svg")
+        .attr("id", "offscreen-svg");
         //.style("display", "none");
     
     SVIFT.render.canvas = d3.select("body")
       .append("div")
-        .attr("id", "offscreen-svg")
+        .attr("id", "offscreen-svg");
         //.style("display", "none");
     
     SVIFT.render.resizeSVG(SVIFT.render.state.width, SVIFT.render.state.height, 0, 0);
@@ -45,10 +45,8 @@ SVIFT.render.setupVis = function(data){
 
   SVIFT.render.state.vis = SVIFT.vis[data.vis.type](SVIFT.render.state.default, SVIFT.render.container);
   SVIFT.render.state.vis.setScale(true);
-
   SVIFT.render.state.vis.init();
-  SVIFT.render.state.vis.start();
-
+  //SVIFT.render.state.vis.start();
   SVIFT.render.state.vis.setScale(false);
 
 };
@@ -67,20 +65,20 @@ SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHe
     SVIFT.render.state.vis.setScale(true);
 
     SVIFT.render.container
-      .style('width', renderWidth)
-      .style('height', renderHeight);
+      .style('width', renderWidth + "px")
+      .style('height', renderHeight + "px");
     
     SVIFT.render.state.vis.setScale(false);
 
     SVIFT.render.container
-      .style('width', pixelWidth)
-      .style('height', pixelHeight);
+      .style('width', pixelWidth + "px")
+      .style('height', pixelHeight + "px");
 
 
   } else {
     SVIFT.render.container
-      .style('width', pixelWidth)
-      .style('height', pixelHeight);
+      .style('width', pixelWidth + "px")
+      .style('height', pixelHeight + "px");
   }
 };
 
