@@ -22,6 +22,9 @@ SVIFT.render.init = function(){
       .append("div")
         .attr("id", "offscreen-svg")
         //.style("display", "none");
+        .style("top", 0)
+        .style("left", 0)
+        .style("z-index", 999)
         .style("position", "absolute");
     
     // set default width/height 
