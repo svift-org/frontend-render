@@ -90,7 +90,7 @@ SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHe
  */
 SVIFT.render.drawPNG = function(){
 
-  d3.selectAll('#offscreen-svg svg *').each(function(d,i){
+  d3.selectAll('#offscreen-svg svg text, #offscreen-svg svg path, #offscreen-svg svg rect, #offscreen-svg svg circle, #offscreen-svg svg line, #offscreen-svg svg ellipse, #offscreen-svg svg tspan, #offscreen-svg svg title').each(function(d,i){
     var that = d3.select(this);
     var styles = window.getComputedStyle(that.node());
     for(var key in styles){
