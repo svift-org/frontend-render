@@ -99,7 +99,7 @@ SVIFT.render.drawPNG = function(){
     var styles = window.getComputedStyle(that.node());
 
     for(key in styles){
-      if(isNaN(key)){
+      if(isNaN(key) && key !== 'transform'){
         if(that.attr(key) !== null){
           styles[key] = that.attr(key);
         }
