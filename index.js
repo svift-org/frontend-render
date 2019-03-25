@@ -98,9 +98,19 @@ SVIFT.render.drawPNG = function(){
     var that = d3.select(this);
     var styles = window.getComputedStyle(that.node());
     var computedStyleStr = "";
+    var dict = {};
+
+    for(key in styles){
+      if(!isNaN(key)){
+        let tKey = (key.split('-').join('')).toLowerCase();
+        dict[tKey] = styles[key];
+      }
+    }
+
     for(key in styles){
       if(isNaN(key)){
-        computedStyleStr += key + ":" + styles[key] + ";";
+        let tKey = (key.split('-').join('')).toLowerCase();
+        computedStyleStr += dict[tKey] + ":" + styles[key] + ";";
       }
     }
     that.node().setAttribute('style', computedStyleStr);
