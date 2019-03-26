@@ -232,29 +232,35 @@ SVIFT.render = function(){
   /*
   * Resize svg pixelWidth/pixelHeight for output size, renderWidth/renderHeight for internal size
   */
-  module.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHeight){
+  module.resizeSVG = function(renderWidth, renderHeight, pixelWidth, pixelHeight){
+    d3.select('#offscreen-svg svg')
+      .style('width', "100%")
+      .style('height', "100%");
+
     if(state.setup){
 
-      d3.select('#offscreen-svg svg')
-        .style('width', "100%")
-        .style('height', "100%");
-
-      vis.setScale(true);
+      vis.setScale(false);
 
       container
         .style('width', renderWidth + "px")
         .style('height', renderHeight + "px");
       
-      vis.setScale(false);
+      vis.preResize();
+      
+      vis.setScale(true);
 
       container
         .style('width', pixelWidth + "px")
         .style('height', pixelHeight + "px");
+      
+      vis.preResize();
 
     } else {
       container
         .style('width', pixelWidth + "px")
         .style('height', pixelHeight + "px");
+      
+      vis.preResize();
     }
   };
 
@@ -334,6 +340,8 @@ SVIFT.render = function(){
         link.download = "animation.gif";
         link.href = URL.createObjectURL(blob);
         link.click();
+
+        state.gif = false;
 
       });
 
