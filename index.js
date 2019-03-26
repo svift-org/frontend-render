@@ -110,7 +110,7 @@ SVIFT.render = function(){
       css.forEach(function(c){
         var value = styles[c[1]];
         if(that.attr(c[0]) !== null){
-          value = that.attr(key);
+          value = that.attr(c[0]);
         }
         that.style(c[0], value);
       });
