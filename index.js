@@ -13,6 +13,16 @@ SVIFT.render = function(){
   container,
   data, vis;
 
+  var css = [
+    ["fill","fill"],
+    ["font-family","fontFamily"],
+    ["font-size","fontSize"],
+    ["font-weight","fontWeight"],
+    ["text-anchor","textAnchor"],
+    ["stroke","stroke"],
+    ["stroke-width","strokeWidth"]
+  ];
+
  /*
   * This function sets up an offscreen rendering canvas and svg
   */
@@ -97,15 +107,13 @@ SVIFT.render = function(){
       var that = d3.select(this);
       var styles = window.getComputedStyle(that.node());
 
-      for(key in styles){
-        if(isNaN(key)){
-          var value = styles[key];
-          if(that.attr(key) !== null){
-            value = that.attr(key);
-          }
-          that.node().style[key] = value;
+      css.forEach(function(c){
+        var value = styles[c[1]];
+        if(that.attr(c[0]) !== null){
+          value = that.attr(key);
         }
-      }
+        that.style(c[0], value);
+      });
     });
 
     module.toDataURL(function(data) {
