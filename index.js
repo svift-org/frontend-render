@@ -233,15 +233,11 @@ SVIFT.render = function(){
   * Resize svg pixelWidth/pixelHeight for output size, renderWidth/renderHeight for internal size
   */
   module.resizeSVG = function(renderWidth, renderHeight, pixelWidth, pixelHeight){
-    d3.select('#offscreen-svg svg')
-      .style('width', "100%")
-      .style('height', "100%");
-
     if(state.setup){
 
       vis.setScale(false);
 
-      container
+      container.select('svg')
         .style('width', renderWidth + "px")
         .style('height', renderHeight + "px");
       
@@ -249,14 +245,14 @@ SVIFT.render = function(){
       
       vis.setScale(true);
 
-      container
+      container.select('svg')
         .style('width', pixelWidth + "px")
         .style('height', pixelHeight + "px");
       
       vis.preResize();
 
     } else {
-      container
+      container.select('svg')
         .style('width', renderWidth + "px")
         .style('height', renderHeight + "px");
     }
