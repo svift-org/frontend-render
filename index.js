@@ -257,10 +257,8 @@ SVIFT.render = function(){
 
     } else {
       container
-        .style('width', pixelWidth + "px")
-        .style('height', pixelHeight + "px");
-      
-      vis.preResize();
+        .style('width', renderWidth + "px")
+        .style('height', renderHeight + "px");
     }
   };
 
