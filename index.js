@@ -279,7 +279,7 @@ SVIFT.render = function(){
   module.downloadPNG = function(type){
     if (state.setup && state.running && !state.gif) {
 
-      let tConfig = config.sizes[configKeys[type]];
+      var tConfig = config.sizes[configKeys[type]];
       module.resizeSVG(tConfig.size.width, tConfig.size.height, tConfig.scale.width, tConfig.scale.height);
       module.drawSVG(1);
       module.inlineCSS();
