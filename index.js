@@ -1,209 +1,211 @@
-SVIFT.render = {};
+SVIFT.render = function(){
 
-SVIFT.render.state = {
-  init: false,
-  setup: false,
-  default: null,
-  vis: null,
-  width: 500, 
-  height: 500
-};
+  console.log("0.0.5");
 
-console.log("0.0.4");
+  var module = {};
 
-/*
- * This function sets up an offscreen rendering canvas and svg
- */
-SVIFT.render.init = function(){
-  if(!SVIFT.render.state.running){
-    SVIFT.render.state.running = true;
+  var state = {
+    init: false,
+    setup: false,
+  },
+  width = 500, 
+  height = 500,
+  container,
+  data, vis;
 
-    SVIFT.render.container = d3.select("body")
-      .append("div")
-        .attr("id", "offscreen-svg")
-        //.style("display", "none");
-        .style("top", 0)
-        .style("left", 0)
-        .style("z-index", 999)
-        .style("position", "absolute");
-    
-    // set default width/height 
-    SVIFT.render.resizeSVG(SVIFT.render.state.width, SVIFT.render.state.height, 0, 0);
+ /*
+  * This function sets up an offscreen rendering canvas and svg
+  */
 
-  }
-};
+  module.init = function(){
+    if(!state.running){
+      state.running = true;
+  
+      container = d3.select("body")
+        .append("div")
+          .attr("id", "offscreen-svg")
+          //.style("display", "none");
+          .style("top", 0)
+          .style("left", 0)
+          .style("z-index", 999)
+          .style("position", "absolute");
+      
+      // set default width/height 
+      module.resizeSVG(width, height, 0, 0);
+    }
+  };
 
-/*
+  /*
  * Setup visualisation in the offscreen svg, based on the data's configuration info
  */
-SVIFT.render.setupVis = function(data){
-  SVIFT.render.state.setup = true;
+  module.setupVis = function(_data){
+    state.setup = true;
+    data = _data;
 
-  SVIFT.render.state.default = data;
+    container.select('svg').remove();
 
-  SVIFT.render.container.select('svg').remove();
+    vis = SVIFT.vis[data.vis.type](data, container);
+    vis.setScale(true);
+    vis.init();
+    //vis.start();
+    vis.setScale(false);
+  };
 
-  SVIFT.render.state.vis = SVIFT.vis[data.vis.type](SVIFT.render.state.default, SVIFT.render.container);
-  SVIFT.render.state.vis.setScale(true);
-  SVIFT.render.state.vis.init();
-  //SVIFT.render.state.vis.start();
-  SVIFT.render.state.vis.setScale(false);
+  /*
+  * Move the playhead in the visualisation to the designated keyFrame (integer >= 0)
+  */
+  module.drawSVG = function(keyFrame){
+    vis.goTo(keyFrame);
+    //v.reset();
+  };
 
-};
+  /*
+  * Resize svg pixelWidth/pixelHeight for output size, renderWidth/renderHeight for internal size
+  */
+  module.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHeight){
+    if(state.setup){
+      vis.setScale(true);
 
-/*
- * Move the playhead in the visualisation to the designated keyFrame (integer >= 0)
- */
-SVIFT.render.drawSVG = function(keyFrame){
-  SVIFT.render.state.vis.goTo(keyFrame);
-  //v.reset();
-};
+      container
+        .style('width', renderWidth + "px")
+        .style('height', renderHeight + "px");
+      
+      vis.setScale(false);
 
-/*
- * Resize svg pixelWidth/pixelHeight for output size, renderWidth/renderHeight for internal size
- */
-SVIFT.render.resizeSVG = function(pixelWidth, pixelHeight, renderWidth, renderHeight){
-  if(SVIFT.render.state.setup){
-    SVIFT.render.state.vis.setScale(true);
+      container
+        .style('width', pixelWidth + "px")
+        .style('height', pixelHeight + "px");
 
-    SVIFT.render.container
-      .style('width', renderWidth + "px")
-      .style('height', renderHeight + "px");
-    
-    SVIFT.render.state.vis.setScale(false);
-
-    SVIFT.render.container
-      .style('width', pixelWidth + "px")
-      .style('height', pixelHeight + "px");
-
-
-  } else {
-    SVIFT.render.container
-      .style('width', pixelWidth + "px")
-      .style('height', pixelHeight + "px");
-  }
-};
-
-
-/*
- * Copy the current SVG to the PNG
- */
-SVIFT.render.drawPNG = function(){
-
-  d3.select('#offscreen-svg svg')
-    .style('width', 500)
-    .style('height', 500);
-
-  d3.selectAll('#offscreen-svg svg g, #offscreen-svg svg text, #offscreen-svg svg path, #offscreen-svg svg rect, #offscreen-svg svg circle, #offscreen-svg svg line, #offscreen-svg svg ellipse, #offscreen-svg svg tspan, #offscreen-svg svg title').each(function(d,i){
-    var that = d3.select(this);
-    var styles = window.getComputedStyle(that.node());
-
-    for(key in styles){
-      if(isNaN(key)){
-        var value = styles[key];
-        if(that.attr(key) !== null){
-          value = that.attr(key);
-        }
-        that.node().style[key] = value;
-      }
+    } else {
+      container
+        .style('width', pixelWidth + "px")
+        .style('height', pixelHeight + "px");
     }
-  });
+  };
 
-  SVIFT.render.toDataURL(function(data) {
 
-    var link = document.createElement('a');
-    link.download = "my-image.png";
-    link.href = data;
-    link.click();
+  /*
+  * Copy the current SVG to the PNG
+  */
+  module.drawPNG = function(){
 
-  });
-};
-
-/*
- * Returns the content of the offscreen SVG as a PNG
- */
-SVIFT.render.toDataURL = function(callback) {
-  toDataURL(document.getElementById('offscreen-svg').children[0], "image/png", {
-    callback: callback
-  });
-};
-
-/*
- * Store the PNG data in the SVIFT.render.state object for quick download access
- */
-SVIFT.render.storePNG = function(key){
-};
-
-/*
- * Generate a download request for the data, returns false if image does not exist
- */
-SVIFT.render.downloadPNG = function(key){
-
-};
-
-/*
-
-var canvas = document.getElementById("mcanvas");
-  image = canvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
-  var link = document.createElement('a');
-  link.download = "my-image.png";
-  link.href = image;
-  link.click();
-
-*/
-
-/*
- * Generate a gif
- */
-SVIFT.render.buildGif = function(){
-  var gif = new GIF({
-    workers: 3,
-    quality: 0.5,
-    repeat: 0,
-    width: 500,
-    height: 500
-  }).on("progress", function (p) {
-    console.log("progress", p);
-  }).on("finished", function (blob) {
-    console.log("finished");
-    d3.select('#container').append('img')
-      .attr("src",URL.createObjectURL(blob))
+    d3.select('#offscreen-svg svg')
       .style('width', 500)
       .style('height', 500);
-  });
 
-  /*let img = new Image();
-    img.crossOrigin = "*";
-    
-    img.onload = function(){
-      gif.addFrame(img, {
-        delay: 1,
-        copy: true
-      });
+    d3.selectAll('#offscreen-svg svg g, #offscreen-svg svg text, #offscreen-svg svg path, #offscreen-svg svg rect, #offscreen-svg svg circle, #offscreen-svg svg line, #offscreen-svg svg ellipse, #offscreen-svg svg tspan, #offscreen-svg svg title').each(function(d,i){
+      var that = d3.select(this);
+      var styles = window.getComputedStyle(that.node());
 
-      added++;
-      if(added == 9){
-        gif.render();
-      }else{
-        addFrame();
+      for(key in styles){
+        if(isNaN(key)){
+          var value = styles[key];
+          if(that.attr(key) !== null){
+            value = that.attr(key);
+          }
+          that.node().style[key] = value;
+        }
       }
-    };
+    });
 
-    img.src = data; */
-};
+    module.toDataURL(function(data) {
 
-/*
- * Generate a download request for the GIF
- */
-SVIFT.render.downloadGIF = function(){
-};
+      var link = document.createElement('a');
+      link.download = "my-image.png";
+      link.href = data;
+      link.click();
 
-/*
- * Returns the current render status for progress display
- */
-SVIFT.render.getStatus = function(){
-};
+    });
+  };
 
+  /*
+  * Returns the content of the offscreen SVG as a PNG
+  */
+  module.toDataURL = function(callback) {
+    toDataURL(document.getElementById('offscreen-svg').children[0], "image/png", {
+      callback: callback
+    });
+  };
+
+  /*
+  * Store the PNG data in the SVIFT.render.state object for quick download access
+  */
+  module.storePNG = function(key){
+  };
+
+  /*
+  * Generate a download request for the data, returns false if image does not exist
+  */
+  module.downloadPNG = function(key){
+
+  };
+
+  /*
+
+  var canvas = document.getElementById("mcanvas");
+    image = canvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+    var link = document.createElement('a');
+    link.download = "my-image.png";
+    link.href = image;
+    link.click();
+
+  */
+
+  /*
+  * Generate a gif
+  */
+  module.buildGif = function(){
+    var gif = new GIF({
+      workers: 3,
+      quality: 0.5,
+      repeat: 0,
+      width: 500,
+      height: 500
+    }).on("progress", function (p) {
+      console.log("progress", p);
+    }).on("finished", function (blob) {
+      console.log("finished");
+      d3.select('#container').append('img')
+        .attr("src",URL.createObjectURL(blob))
+        .style('width', 500)
+        .style('height', 500);
+    });
+
+    /*let img = new Image();
+      img.crossOrigin = "*";
+      
+      img.onload = function(){
+        gif.addFrame(img, {
+          delay: 1,
+          copy: true
+        });
+
+        added++;
+        if(added == 9){
+          gif.render();
+        }else{
+          addFrame();
+        }
+      };
+
+      img.src = data; */
+  };
+
+  /*
+  * Generate a download request for the GIF
+  */
+  module.downloadGIF = function(){
+  };
+
+  /*
+  * Returns the current render status for progress display
+  */
+  module.getStatus = function(){
+  };
+
+  return module;
+
+}();
 
 /*
 
