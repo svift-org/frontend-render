@@ -338,6 +338,7 @@ SVIFT.render = function(){
       });
 
       module.addFrame();
+    }
   };
 
   module.addFrame = function() {
