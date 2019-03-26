@@ -190,11 +190,7 @@ SVIFT.render = function(){
       container = d3.select("body")
         .append("div")
           .attr("id", "offscreen-svg")
-          //.style("display", "none");
-          .style("top", 0)
-          .style("left", 0)
-          .style("z-index", 999)
-          .style("position", "absolute");
+          .style("display", "none");
       
       // set default width/height 
       module.resizeSVG(width, height, 0, 0);
