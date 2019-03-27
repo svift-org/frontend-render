@@ -16,6 +16,7 @@ SVIFT.render = function(){
     full : {
       svg : 0,
       png : 0,
+      social: 0,
       gif : 0
     }
   },
@@ -391,7 +392,9 @@ SVIFT.render = function(){
     module.buildPNG(config.sizes[state.buildStep].file, function(){
       state.buildStep++;
       if(state.buildStep >= config.sizes.length){
+        console.log(status);
         status.full.png = 1;
+        status.full.social = 1;
         module.buildGif(function(){
           status.full.gif = 1;
           status.status = 1;
