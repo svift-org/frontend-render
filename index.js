@@ -356,13 +356,19 @@ SVIFT.render = function(){
         
       img.onload = function() {
         gif.addFrame(img, {
-          delay: 1,
+          delay: 0.5,
           copy: true
         });
 
         state.gifStep++;
 
         if(state.gifStep >= config.video.frames){
+          // adding delay before restart
+          gif.addFrame(img, {
+            delay: 3,
+            copy: true
+          });
+
           gif.render();
         }else{
           module.addFrame();
