@@ -8,8 +8,18 @@ SVIFT.render = function(){
     init: false,
     setup: false,
     gif: false,
-    gifStep: 0
+    gifStep: 0,
+    buildStep: 0
   },
+  status = {
+    status : 0,
+    full : {
+      svg : 0,
+      png : 0,
+      gif : 0
+    }
+  },
+  statusDefault = JSON.parse(JSON.stringify(status)),
   width = 500, 
   height = 500,
   container,
@@ -278,7 +288,7 @@ SVIFT.render = function(){
   /*
   * provide a filename from the config and a download will be created
   */
-  module.downloadPNG = function(type){
+  module.buildPNG = function(type, callback){
     if (state.setup && state.running && !state.gif) {
 
       var tConfig = config.sizes[configKeys[type]];
@@ -287,13 +297,8 @@ SVIFT.render = function(){
       module.inlineCSS();
 
       module.toDataURL(function(data) {
-
-        //.replace("image/png", "image/octet-stream")
-        var link = document.createElement('a');
-        link.download = type + ".png";
-        link.href = data;
-        link.click();
-
+        storage[type] = data;
+        callback();
       });
     } else {
       console.log('Either render not initialised or currently rendering a GIF.');
@@ -312,7 +317,7 @@ SVIFT.render = function(){
   /*
   * Generate a gif
   */
-  module.buildGif = function(){
+  module.buildGif = function(callback){
     if (state.setup && state.running && !state.gif) {
 
       state.gif = true;
@@ -328,16 +333,12 @@ SVIFT.render = function(){
         width: config.video.size.width,
         height: config.video.size.height
       }).on("progress", function (p) {
-        console.log("progress", p);
-      }).on("finished", function (blob) {
-        console.log("finished");
+        status.full.gif = p;
         
-        var link = document.createElement('a');
-        link.download = "animation.gif";
-        link.href = URL.createObjectURL(blob);
-        link.click();
-
+      }).on("finished", function (blob) {
+        storage["video"] = URL.createObjectURL(blob);
         state.gif = false;
+        callback();
 
       });
 
@@ -380,17 +381,52 @@ SVIFT.render = function(){
     });
   };
 
-  /*
-  * Generate a download request for the GIF
-  */
-  module.downloadGIF = function(){
+  module.buildSet = function(){
+    status = JSON.parse(JSON.stringify(defaultStatus));
+    state.buildStep = 0;
+    buildNextPNG();
+  };
+
+  module.buildNextPNG = function(){
+    module.buildPNG(config.sizes[state.buildStep].file, function(){
+      state.buildStep++;
+      if(state.buildStep >= config.sizes.length){
+        status.full.png = 1;
+        module.buildGif(function(){
+          status.full.gif = 1;
+          status.status = 1;
+          //Generate the SVG??
+        });
+      }else{
+        module.buildNextPNG();
+      }
+    });
   };
 
   /*
   * Returns the current render status for progress display
   */
   module.getStatus = function(){
+    return status;
   };
+
+  /*
+  * Generate a download request for the GIF
+  */
+  module.downloadGIF = function(){
+    module.generateDownload('video');
+  };
+
+  module.generateDownload = function(key){
+    //.replace("image/png", "image/octet-stream")
+    var link = document.createElement('a');
+    link.download = key + ".png";
+    link.href = storage[key];
+    link.click();
+  }
+  
+
+
 
   /*
 
