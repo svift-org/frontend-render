@@ -422,6 +422,7 @@ SVIFT.render = function(){
     var link = document.createElement('a');
     link.download = key + ".png";
     link.href = storage[key];
+    document.body.appendChild(link); //firefox fix
     link.click();
   }
   
