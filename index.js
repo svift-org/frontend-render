@@ -384,7 +384,7 @@ SVIFT.render = function(){
   module.buildSet = function(){
     status = JSON.parse(JSON.stringify(defaultStatus));
     state.buildStep = 0;
-    buildNextPNG();
+    module.buildNextPNG();
   };
 
   module.buildNextPNG = function(){
