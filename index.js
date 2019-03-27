@@ -423,7 +423,7 @@ SVIFT.render = function(){
   module.generateDownload = function(key){
     //.replace("image/png", "image/octet-stream")
     var link = document.createElement('a');
-    link.download = key + ".png";
+    link.download = key + ((key === "video")?".gif":".png");
     link.href = storage[key];
     document.body.appendChild(link); //firefox fix
     link.click();
