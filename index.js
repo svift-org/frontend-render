@@ -328,7 +328,7 @@ SVIFT.render = function(){
 
       gif = new GIF({
         workers: 3,
-        quality: 10,
+        quality: 1,
         repeat: 0,
         debug:true,
         width: config.video.size.width,
@@ -358,7 +358,7 @@ SVIFT.render = function(){
         
       img.onload = function() {
         gif.addFrame(img, {
-          delay: 0.0001,
+          delay: 0.00000001,
           copy: true
         });
 
@@ -367,7 +367,7 @@ SVIFT.render = function(){
         if(state.gifStep >= config.video.frames){
           // adding delay before restart
           gif.addFrame(img, {
-            delay: 0.0001,
+            delay: 0.00000001,
             copy: true
           });
 
