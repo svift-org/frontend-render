@@ -201,7 +201,6 @@ SVIFT.render = function(){
       container = d3.select("body")
         .append("div")
           .attr("id", "offscreen-svg")
-          //.style("display", "none");
           .style("visibility", "hidden")
           .style("pointer-events", "none")
           .style("top", 0)
@@ -329,8 +328,9 @@ SVIFT.render = function(){
 
       gif = new GIF({
         workers: 3,
-        quality: 0.5,
+        quality: 10,
         repeat: 0,
+        debug:true,
         width: config.video.size.width,
         height: config.video.size.height
       }).on("progress", function (p) {
@@ -358,7 +358,7 @@ SVIFT.render = function(){
         
       img.onload = function() {
         gif.addFrame(img, {
-          delay: 0.02,
+          delay: 500,
           copy: true
         });
 
@@ -367,7 +367,7 @@ SVIFT.render = function(){
         if(state.gifStep >= config.video.frames){
           // adding delay before restart
           gif.addFrame(img, {
-            delay: 600,
+            delay: 500,
             copy: true
           });
 
