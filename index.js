@@ -35,7 +35,7 @@ SVIFT.render = function(){
         "width":500,
         "height":500
       },
-      frames: 200
+      frames: 100
     },
     "sizes":[
       {
