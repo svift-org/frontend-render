@@ -358,7 +358,7 @@ SVIFT.render = function(){
         
       img.onload = function() {
         gif.addFrame(img, {
-          delay: 1,
+          delay: 0.1,
           copy: true
         });
 
