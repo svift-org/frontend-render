@@ -384,6 +384,7 @@ SVIFT.render = function(){
 
   module.buildSet = function(){
     status = JSON.parse(JSON.stringify(defaultStatus));
+    console.log(status);
     state.buildStep = 0;
     module.buildNextPNG();
   };
@@ -393,7 +394,7 @@ SVIFT.render = function(){
       state.buildStep++;
       if(state.buildStep >= config.sizes.length){
         console.log(status);
-        status.full.png = 1;
+        status['full']['png'] = 1;
         status.full.social = 1;
         module.buildGif(function(){
           status.full.gif = 1;
