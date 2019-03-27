@@ -191,6 +191,8 @@ SVIFT.render = function(){
         .append("div")
           .attr("id", "offscreen-svg")
           //.style("display", "none");
+          .style("visibility", "hidden")
+          .style("pointer-events", "none")
           .style("top", 0)
           .style("left", 0)
           .style("z-index", 999)
