@@ -383,8 +383,7 @@ SVIFT.render = function(){
   };
 
   module.buildSet = function(){
-    status = JSON.parse(JSON.stringify(defaultStatus));
-    console.log(status);
+    status = JSON.parse(JSON.stringify(statusDefault));
     state.buildStep = 0;
     module.buildNextPNG();
   };
