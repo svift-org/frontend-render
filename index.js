@@ -292,7 +292,9 @@ SVIFT.render = function(){
         var link = document.createElement('a');
         link.download = type + ".png";
         link.href = data;
+        document.body.appendChild(link); // required for firefox
         link.click();
+        link.remove();
 
       });
     } else {
@@ -335,7 +337,9 @@ SVIFT.render = function(){
         var link = document.createElement('a');
         link.download = "animation.gif";
         link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link); // required for firefox
         link.click();
+        link.remove();
 
         state.gif = false;
 
