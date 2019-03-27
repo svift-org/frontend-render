@@ -261,6 +261,9 @@ SVIFT.render = function(){
   };
 
   module.inlineCSS = function() {
+    d3.select('#offscreen-svg svg')
+      .style('visibility', 'visible');
+
     d3.selectAll('#offscreen-svg svg g, #offscreen-svg svg text, #offscreen-svg svg path, #offscreen-svg svg rect, #offscreen-svg svg circle, #offscreen-svg svg line, #offscreen-svg svg ellipse, #offscreen-svg svg tspan, #offscreen-svg svg title').each(function(d,i){
       var that = d3.select(this);
       var styles = window.getComputedStyle(that.node());
