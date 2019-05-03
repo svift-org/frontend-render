@@ -150,11 +150,11 @@ SVIFT.render = function(){
         "name":"Horizontal / Landscape",
         "size":{
           "width":1024,
-          "height":512
+          "height":768
         },
         "scale":{
           "width":2048,
-          "height":1024
+          "height":1536
         }
       },
       {
