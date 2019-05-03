@@ -24,7 +24,7 @@ SVIFT.render = function(){
   width = 500, 
   height = 500,
   container,
-  data, vis, gif, storage = {};
+  data, vis, gif, storage = {}, svgStorage = {};
 
   var css = [
     ["fill","fill"],
@@ -293,11 +293,13 @@ SVIFT.render = function(){
 
       var tConfig = config.sizes[configKeys[type]];
       module.resizeSVG(tConfig.size.width, tConfig.size.height, tConfig.scale.width, tConfig.scale.height);
+      vis.reset();
       module.drawSVG(1);
       module.inlineCSS();
 
       module.toDataURL(function(data) {
         storage[type] = data;
+        svgStorage[type] = module.getSVG();
         callback();
       });
     } else {
@@ -343,8 +345,35 @@ SVIFT.render = function(){
 
       });
 
-      module.addFrame();
+      module.preFrame();
     }
+  };
+
+  /*
+  * Add the last frame as a first frame for twitter sharing preview  
+  */
+  module.preFrame = function() {
+    module.drawSVG(1);
+    module.inlineCSS();
+
+    module.toDataURL(function(data) {
+
+      var img = new Image();
+      img.crossOrigin = "*";
+        
+      img.onload = function() {
+        gif.addFrame(img, {
+          delay: 1,
+          copy: true
+        });
+
+        vis.reset();
+        module.addFrame();
+      };
+
+      img.src = data;
+
+    });
   };
 
   module.addFrame = function() {
@@ -392,13 +421,11 @@ SVIFT.render = function(){
     module.buildPNG(config.sizes[state.buildStep].file, function(){
       state.buildStep++;
       if(state.buildStep >= config.sizes.length){
-        console.log(status);
         status['full']['png'] = 1;
         status.full.social = 1;
         module.buildGif(function(){
           status.full.gif = 1;
           status.status = 1;
-          //Generate the SVG??
         });
       }else{
         module.buildNextPNG();
@@ -420,62 +447,44 @@ SVIFT.render = function(){
     module.generateDownload('video');
   };
 
-  module.generateDownload = function(key){
+  module.generateDownload = function(key, type){
     //.replace("image/png", "image/octet-stream")
     var link = document.createElement('a');
     link.download = key + ((key === "video")?".gif":".png");
-    link.href = storage[key];
+    if(type === "svg") {
+      link.href = svgStorage[key];
+    }else{
+      link.href = storage[key];
+    }
     document.body.appendChild(link); //firefox fix
     link.click();
   }
-  
 
+  module.getSVG = function() {
 
-
-  /*
-
-  DOWNLOAD SVG
-
-  var svg_root = document.getElementById('your_svg_root_element_here');
-var svg_source = svg_root.outerHTML;
-var svg_data_uri = 'data:image/svg+xml;base64,' + btoa(svg_source);
-var link = document.getElementById('anchor_element');
-link.setAttribute('href', svg_data_uri);
-
-  */
-
-  return module;
-
-}();
-
-/*
-
-  var v;
-
-  function resize(){
-    v.preResize();
-    return true;
-  }
-
-  function getSVG(){
-
-    // javascript:javascript: (function () { 
-    //   var e = document.createElement('script'); 
-    //   e.setAttribute('src', 'https://nytimes.github.io/svg-crowbar/svg-crowbar-2.js'); 
-    //   e.setAttribute('class', 'svg-crowbar'); 
-    //   document.body.appendChild(e); 
-    // })();
-
-    var axis_groups = d3.selectAll('g[text-anchor="middle"]');
+    var axis_groups = d3.selectAll('#offscreen-svg g[text-anchor="middle"]');
     axis_groups.selectAll('text').attr('text-anchor','middle');
     reCalcD(axis_groups);
 
-    axis_groups = d3.selectAll('g[text-anchor="end"]');
+    axis_groups = d3.selectAll('#offscreen-svg g[text-anchor="end"]');
     axis_groups.selectAll('text').attr('text-anchor','end');
     reCalcD(axis_groups);
 
-    return d3.select('#container').html();
-  }
+    var svgCode = d3.select('#offscreen-svg').html();
+
+    var replace = [
+      ['sans-serif', 'Verdana'],
+      ['width="100%"', 'width="'+width+'"'],
+      ['height="100%"', 'height="'+height+'"'],
+      ['<svg', '<svg xmlns="http://www.w3.org/2000/svg"']
+    ]
+  
+    replace.forEach(function(r){
+      svgCode = svgCode.split(r[0]).join(r[1])
+    })
+  
+    return svgCode;
+  };
 
   function reCalcD(axis){
     axis.each(function(d){
@@ -502,4 +511,6 @@ link.setAttribute('href', svg_data_uri);
     return true;
   }
 
-*/
+  return module;
+
+}();
