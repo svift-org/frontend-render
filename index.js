@@ -450,10 +450,11 @@ SVIFT.render = function(){
   module.generateDownload = function(key, type){
     //.replace("image/png", "image/octet-stream")
     var link = document.createElement('a');
-    link.download = key + ((key === "video")?".gif":".png");
     if(type === "svg") {
+      link.download = key + ".svg";
       link.href = svgStorage[key];
     }else{
+      link.download = key + ((key === "video")?".gif":".png");
       link.href = storage[key];
     }
     document.body.appendChild(link); //firefox fix
@@ -476,14 +477,14 @@ SVIFT.render = function(){
       ['sans-serif', 'Verdana'],
       ['width="100%"', 'width="'+width+'"'],
       ['height="100%"', 'height="'+height+'"'],
-      ['<svg', '<svg xmlns="http://www.w3.org/2000/svg"']
+      ['<svg', '<?xml version="1.0" standalone="no"?><svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"']
     ]
   
     replace.forEach(function(r){
       svgCode = svgCode.split(r[0]).join(r[1])
     })
   
-    return svgCode;
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgCode);
   };
 
   function reCalcD(axis){
