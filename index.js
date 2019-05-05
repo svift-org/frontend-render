@@ -341,7 +341,7 @@ SVIFT.render = function(){
       }).on("finished", function (blob) {
         storage["video"] = URL.createObjectURL(blob);
         state.gif = false;
-        gif.freeWorkers.forEach(w => w.terminate());
+        gif.freeWorkers.forEach(function(w){ w.terminate(); });
         callback();
 
       });
