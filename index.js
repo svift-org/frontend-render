@@ -452,7 +452,7 @@ SVIFT.render = function(){
     //.replace("image/png", "image/octet-stream")
     var link = document.createElement('a');
     if(type === "svg") {
-      link.download = key + ".svg";
+      link.download = "svift" + ".svg";
       link.href = svgStorage[key];
     }else{
       link.download = "svift" + ((key === "video")?".gif":".png");
