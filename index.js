@@ -455,7 +455,7 @@ SVIFT.render = function(){
       link.download = key + ".svg";
       link.href = svgStorage[key];
     }else{
-      link.download = key + ((key === "video")?".gif":".png");
+      link.download = ((key === "video")?"svift":key) + ((key === "video")?".gif":".png");
       link.href = storage[key];
     }
     document.body.appendChild(link); //firefox fix
